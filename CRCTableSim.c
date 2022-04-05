@@ -40,22 +40,24 @@ unsigned long int compute_crc( unsigned long input, int len)
 }
 
 bool isTableCreated = false;
-unsigned long crc_table[ 255 ]; // Table that stores partially calculated inputs. 
+unsigned long crc_table[ 256 ]; // Table that stores partially calculated inputs. 
 
-unsigned long int compute_crc_WITHTABLE( unsigned char *input, int len)
+unsigned long int compute_crc_WITHTABLE(unsigned char *input, int len)
 {
   unsigned long crc = 0xFFFFFFFF;
 
-  for (int i = 0; i < len; i++ )
+  for (int i = 0; i < len; i++)
   {
-    crc = crc_table[ ( crc ^ input[ i ] ) & 0xff ] ^ ( crc >> 8 );
+    crc = (crc >> 8) ^ crc_table[(crc ^ ((unsigned long)input[i])) & 0xff];
   }
 
   return crc ^ 0xFFFFFFFF;
 }
-unsigned long int crc_byte( unsigned long input)
+
+unsigned long int crc_byte(unsigned long input)
 {
-  for (int k = 8; k > 0; k-- )
+  const unsigned int polynomial = 0xEDB88320;
+  for (int k = 8; k > 0; k--)
   {
 	  if (input & 1)
 	  {
@@ -74,9 +76,9 @@ bool createTable()
 {
 	if (!isTableCreated)
 	{
-		for (int i = 0; i < 255; i++ )
+		for (int i = 0; i < 256; i++)
 		{
-			crc_table[ i ] = crc_byte( i );
+			crc_table[i] = crc_byte(i);
 		}
 	}
 	return true;
@@ -84,7 +86,7 @@ bool createTable()
 
 int main(int argc, char *argv[]){
 	unsigned long int input = 0x8242C200; // "ABC" backwards
-	printf( "%lx\n", compute_crc( input, 24)); // 5A5B433A
+	printf( "%lx\n", compute_crc(input, 24)); // 5A5B433A
   
 
 	printf("\n%d\n", reverseBits(input));
@@ -94,5 +96,5 @@ int main(int argc, char *argv[]){
 	isTableCreated = createTable();
 
 	unsigned char *input2 = "ABC";
-	printf( "%lx\n", compute_crc_WITHTABLE( input2, 24)); // 5A5B433A
+	printf( "%lx\n", compute_crc_WITHTABLE(input2, 3)); //a3830348 // 5A5B433A
 }
