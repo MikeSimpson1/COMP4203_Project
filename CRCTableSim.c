@@ -45,13 +45,15 @@ unsigned long crc_table[ 256 ]; // Table that stores partially calculated inputs
 unsigned long int compute_crc_WITHTABLE(unsigned char *input, int len)
 {
   unsigned long crc = 0xFFFFFFFF;
-
+  unsigned long tableIndex;
+  
   for (int i = 0; i < len; i++)
   {
-    crc = (crc >> 8) ^ crc_table[(crc ^ ((unsigned long)input[i])) & 0xff];
+    tableIndex = 0xff & (((unsigned long)input[i]) ^ crc);
+    crc = (crc >> 8) ^ crc_table[tableIndex];
   }
 
-  return crc ^ 0xFFFFFFFF;
+  return 0xFFFFFFFF ^ crc;
 }
 
 unsigned long int crc_byte(unsigned long input)
