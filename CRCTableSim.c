@@ -88,15 +88,15 @@ bool createTable()
 
 int main(int argc, char *argv[]){
 	unsigned long int input = 0x8242C200; // "ABC" backwards
-	printf( "%lx\n", compute_crc(input, 24)); // 5A5B433A
+	printf( "Naive: %lx\n", compute_crc(input, 24)); // 5A5B433A
 	
 
-	printf("\n%d\n", reverseBits(input));
+	//printf("\n%d\n", reverseBits(input));
 	// Builds the table.
 	// Sets variable so that the table won't need to be created on
 	// subsequent runs.
 	isTableCreated = createTable();
 
 	unsigned char *input2 = "ABC";
-	printf( "%lx\n", compute_crc_WITHTABLE(input2, 3)); //a3830348 // 5A5B433A
+	printf( "Table-Lookup: %lx\n", compute_crc_WITHTABLE(input2, 3)); //a3830348 // 5A5B433A
 }
