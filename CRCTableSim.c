@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 //Our division polynomial.
-const unsigned int polynomial = 0x04C11DB7;
+
 unsigned int reverseBits(unsigned int n)
 {
 	unsigned int reversed = 0;
@@ -23,6 +23,7 @@ unsigned int reverseBits(unsigned int n)
 // Shifts the input bit by bit and applies modulo 2 addition per iteration.
 // This is meant to simulate polynomial division where calculations are done
 // in GF(2) or modulo 2 arithmetic. 
+const unsigned int polynomial = 0x04C11DB7;
 unsigned long int compute_crc( unsigned long input, int len)
 {
 	while (len > 0){
