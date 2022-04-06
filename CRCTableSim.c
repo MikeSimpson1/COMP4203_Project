@@ -40,7 +40,7 @@ unsigned long int compute_crc( unsigned long input, int len)
 }
 
 bool isTableCreated = false;
-unsigned long crc_table[ 256 ]; // Table that stores partially calculated inputs. 
+unsigned long crc_table[ 256 ]; // Table that stores partially calculated inputs.
 
 unsigned long int compute_crc_WITHTABLE(unsigned char *input, int len)
 {
@@ -49,7 +49,7 @@ unsigned long int compute_crc_WITHTABLE(unsigned char *input, int len)
   
   for (int i = 0; i < len; i++)
   {
-    tableIndex = 0xff & (((unsigned long)input[i]) ^ crc);
+    tableIndex = 0xFF & (((unsigned long)input[i]) ^ crc);
     crc = (crc >> 8) ^ crc_table[tableIndex];
   }
 
@@ -89,7 +89,7 @@ bool createTable()
 int main(int argc, char *argv[]){
 	unsigned long int input = 0x8242C200; // "ABC" backwards
 	printf( "%lx\n", compute_crc(input, 24)); // 5A5B433A
-  
+	
 
 	printf("\n%d\n", reverseBits(input));
 	// Builds the table.
