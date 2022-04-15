@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 //Our division polynomial.
 
@@ -87,8 +88,9 @@ bool createTable()
 	return true;
 }
 
+
 int main(int argc, char *argv[]){
-	unsigned long int input = 0x8242C200; // "ABC" backwards
+	unsigned long int input = 0x8242C2; // "ABC" backwards
 	printf( "Naive: %lx\n", compute_crc(input, 24)); // 5A5B433A
 	
 
@@ -100,4 +102,33 @@ int main(int argc, char *argv[]){
 
 	unsigned char *input2 = "ABC";
 	printf( "Table-Lookup: %lx\n", compute_crc_WITHTABLE(input2, 3)); //a3830348 // 5A5B433A
+
+
+	/*
+		TESTING --
+	*/
+	clock_t start, end;
+	FILE* file = fopen("Test_Input.txt", "r");
+	char line[250000];
+	start = clock();
+	while (fgets(line, sizeof(line), file)){
+		compute_crc((unsigned long int)line, 24);
+	}
+	end = clock();
+	double time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
+	printf("Naive approach took %f seconds to execute\n", time_taken);
+	fclose(file);
+
+
+	FILE* file2 = fopen("Test_Input.txt", "r");
+	char line2[250000];
+
+	start = clock();
+	while (fgets(line2, sizeof(line2), file2)){
+		compute_crc_WITHTABLE(line2, 3);
+	}
+	end = clock();
+	time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
+	printf("Table-Lookup approach took %f seconds to execute\n", time_taken);
+	fclose(file2);
 }
